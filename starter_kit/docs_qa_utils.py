@@ -8,7 +8,7 @@ guaranteed to be complete or bug-free.
 import json
 import re
 
-CHUNK_SIZE = 400
+CHUNK_SIZE = 100
 
 
 def load_docs(path):
@@ -19,12 +19,10 @@ def load_docs(path):
 
 def chunk_text(text, chunk_size=CHUNK_SIZE):
     """Split text into fixed-size chunks."""
-    chunks = []
-    num_chunks = len(text) // chunk_size
-    for i in range(num_chunks):
-        start = i * chunk_size
-        chunks.append(text[start:start + chunk_size])
-    return chunks
+    if chunk_size <= 0:
+        raise ValueError("chunk_size must be positive")
+    return [text[start:start + chunk_size]
+            for start in range(0, len(text), chunk_size)]
 
 
 def chunk_all_docs(docs, chunk_size=CHUNK_SIZE):
